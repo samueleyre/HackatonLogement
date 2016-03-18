@@ -11,43 +11,67 @@
 
 <!-- Milligram CSS minified -->
 <link rel="stylesheet" href="milligram.min.css">
-<style>
-*{
-color: grey;
-}
-body{
+<link rel="stylesheet" href="openloyer.css">
 
-}
-.button, .button-primary{
-color: darkgrey;
-background-color: lightgrey;
-border: grey;
-}
 
-</style>
 
 </head>
 <body>
 
   <div class="container">
-    <form action="">
       <input type="text">
       <button onclick="recherche()"> Rechercher</button>
-    </form>
 
     <div class="results">
-        
+
 
     </div>
 
   </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script charset="utf-8">
 
 
+var trier = function(table) {
 
-function createblock(annonce) {
+  console.log(table);
+  table.sort();
+  for (var i = 0; i < table.length; i++) {
+    createblock(table[i]);
+  }
 
-  console.log(annonce);
+}
+
+
+
+var calculPrix = function(treeData) {
+
+    var tableauPrix = [];
+    for (var i = 0; i < treeData.length; i++) {
+      console.log(treeData[i].LoyerCC);
+      if (treeData[i].LoyerCC) {
+
+      tableauPrix.push(treeData[i].LoyerCC);
+      }
+    }
+    return trier(tableauPrix);
+
+
+
+};
+
+
+function createblock(prix) {
+
+
+
+  $(document).ready(function(){
+    var loyerContainer = $('<div class="prix"></div>');
+    var loyerLink = $('<a class="link" href="#"></a>');
+    loyerLink.html(prix + " €")
+    loyerContainer.append(loyerLink);
+    $('.results').append(loyerContainer);
+  });
 
 
 }
@@ -66,9 +90,7 @@ function recherche() {
   function reqListener(e) {
       treeData = JSON.parse(this.responseText);
       console.log(treeData);
-      for (var i = 0; i < treeData.length; i++) {
-        createblock(treeData[i]);
-      }
+        calculPrix(treeData);
   }
 
 

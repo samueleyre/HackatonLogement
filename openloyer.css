@@ -1,0 +1,23 @@
+*{
+color: grey;
+}
+body{
+
+}
+.button, .button-primary{
+  color: darkgrey;
+  background-color: lightgrey;
+  border: grey;
+}
+
+.prix{
+  padding: 40px;
+  padding-right: 120px;
+  display: inline-block;
+}
+
+.link{
+  background-color: lightgrey;
+  padding: 4px;
+  border-radius: 4px;
+}
