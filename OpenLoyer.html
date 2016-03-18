@@ -15,12 +15,43 @@
 
 
 
+
 </head>
 <body>
 
   <div class="container">
-      <input type="text">
-      <button onclick="recherche()"> Rechercher</button>
+      <input id="ville"type="text" placeholder="Entrez votre adresse de rêve...">
+      <button onclick="recherche()" > Rechercher</button>
+      <div class="rangesContainer">
+        <form class="hideOnStart dateForm" id="dateForm">
+          <label for="day">Jour</label>
+          <input type="number" name="day" id="day" min="1" max="31" value="21"> <br>
+
+          <label for="month">Mois</label>
+          <select name="month" id="month">
+            <option value="Jan">Jan</option>
+            <option value="Feb">Feb</option>
+            <option value="Mar">Mar</option>
+            <option value="Apr">Apr</option>
+            <option value="May">May</option>
+            <option value="Jun">Jun</option>
+            <option value="Jul">Jul</option>
+            <option value="Aug">Aug</option>
+            <option value="Sep">Sep</option>
+            <option value="Oct">Oct</option>
+            <option value="Nov">Nov</option>
+            <option value="Dec">Dec</option>
+          </select> <br>
+          <label for="year">Année</label>
+          <input type="number" name="year" id="year" min="2016" max="2020" value="2016">
+        </form>
+        <label for="setDuration"> Durée de location </label>
+        <input type="range" min="0" max="24" id="setDuration" name="setDuration"><span id="Duration"></span>
+      </div>
+
+
+
+
 
     <div class="results">
 
@@ -30,6 +61,14 @@
   </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script charset="utf-8">
+
+
+$('#setDuration').val(6);
+$('#Duration').html(6 + " mois");
+$('#setDuration').change(function() {
+    $('#Duration').html(this.value + " mois");
+})
+
 
 
 var trier = function(table) {
@@ -76,7 +115,30 @@ function createblock(prix) {
 
 }
 
+
+
+
+function triVille(treeData) {
+
+      var filteredTreeData = [];
+      var ville = $('#ville').val();
+      console.log(ville);
+      for (var i = 0; i < treeData.length; i++) {
+        if (treeData[i].Ville === ville.toUpperCase()) {
+          filteredTreeData.push(treeData[i]);
+        };
+      }
+      calculPrix(filteredTreeData);
+
+}
+
+
+
+
+
 function recherche() {
+
+
 
 
 
@@ -90,7 +152,7 @@ function recherche() {
   function reqListener(e) {
       treeData = JSON.parse(this.responseText);
       console.log(treeData);
-        calculPrix(treeData);
+      triVille(treeData);
   }
 
 
