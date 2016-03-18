@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <!-- Google Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+
+<!-- CSS Reset -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css">
+
+<!-- Milligram CSS minified -->
+<link rel="stylesheet" href="milligram.min.css">
+<style>
+*{
+color: grey;
+}
+body{
+
+}
+.button, .button-primary{
+color: darkgrey;
+background-color: lightgrey;
+border: grey;
+}
+
+</style>
+
+</head>
+<body>
+
+  <div class="container">
+    <form action="">
+      <input type="text">
+      <button onclick="recherche()"> Rechercher</button>
+    </form>
+
+    <div class="results">
+        
+
+    </div>
+
+  </div>
+<script charset="utf-8">
+
+
+
+function createblock(annonce) {
+
+  console.log(annonce);
+
+
+}
+
+function recherche() {
+
+
+
+  var treeData;
+
+  var oReq = new XMLHttpRequest();
+  oReq.onload = reqListener;
+  oReq.open("get", "cartedescolocs.json", true);
+  oReq.send();
+
+  function reqListener(e) {
+      treeData = JSON.parse(this.responseText);
+      console.log(treeData);
+      for (var i = 0; i < treeData.length; i++) {
+        createblock(treeData[i]);
+      }
+  }
+
+
+}
+</script>
+
+
+
+
+
+</body>
+</html>
