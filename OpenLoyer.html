@@ -45,6 +45,8 @@
           <label for="year">Année</label>
           <input type="number" name="year" id="year" min="2016" max="2020" value="2016">
         </form>
+        <label for="setLoan"> Budget </label>
+        <input type="number" name="Loan" id="Loan" min="0" value="0">
         <label for="setDuration"> Durée de location </label>
         <input type="range" min="0" max="24" id="setDuration" name="setDuration"><span id="Duration"></span>
       </div>
@@ -53,7 +55,7 @@
 
 
 
-    <div class="results">
+    <div class="results" id="results">
 
 
     </div>
@@ -69,12 +71,12 @@ $('#setDuration').change(function() {
     $('#Duration').html(this.value + " mois");
 })
 
-
+var tableauPrix = [];
 
 var trier = function(table) {
 
   console.log(table);
-  table.sort();
+  table.sort(function(a, b) { return a - b; })
   for (var i = 0; i < table.length; i++) {
     createblock(table[i]);
   }
@@ -83,19 +85,55 @@ var trier = function(table) {
 
 
 
-var calculPrix = function(treeData) {
+var calculPrix = function(treeData, boncoin) {
 
-    var tableauPrix = [];
+
+if (boncoin === "BonCoin")  {
+
+  if (treeData) {
+
     for (var i = 0; i < treeData.length; i++) {
-      console.log(treeData[i].LoyerCC);
-      if (treeData[i].LoyerCC) {
+      // console.log(treeData[i].LoyerCC);
+      if (treeData[i].fields.loyer_en_euros <= $('#Loan').val()) {
 
-      tableauPrix.push(treeData[i].LoyerCC);
+      tableauPrix.push(treeData[i].fields.loyer_en_euros);
       }
     }
-    return trier(tableauPrix);
+  }
+  return trier(tableauPrix);
 
 
+}  else {
+
+
+      // var tableauPrix = [];
+      for (var i = 0; i < treeData.length; i++) {
+        console.log(treeData[i].LoyerCC);
+        if (treeData[i].LoyerCC <= $('#Loan').val()) {
+
+        tableauPrix.push(treeData[i].LoyerCC);
+        }
+      }
+
+      // get data from bon coin
+        var treeDataBC;
+
+        function reqListener(e) {
+            treeDataBC = JSON.parse(this.responseText);
+            console.log(treeDataBC);
+            triVille(treeDataBC, "BonCoin");
+        }
+
+        var oReq = new XMLHttpRequest();
+        oReq.onload = reqListener;
+        oReq.open("get", "scrapboincoin69003.json", true);
+        oReq.send();
+
+
+
+      // return trier(tableauPrix);
+
+  }
 
 };
 
@@ -118,7 +156,23 @@ function createblock(prix) {
 
 
 
-function triVille(treeData) {
+function triVille(treeData, boncoin) {
+
+    if (boncoin === "BonCoin") {
+
+      var ville = $('#ville').val();
+      console.log(ville);
+      // console.log(ville.toUpperCase);
+      if ("LYON 3" === ville.toUpperCase()) {
+        calculPrix(treeData, "BonCoin");
+      } else {
+        calculPrix(undefined, "BonCoin");
+      }
+
+
+
+    } else {
+
 
       var filteredTreeData = [];
       var ville = $('#ville').val();
@@ -128,8 +182,9 @@ function triVille(treeData) {
           filteredTreeData.push(treeData[i]);
         };
       }
-      calculPrix(filteredTreeData);
+      calculPrix(filteredTreeData, "");
 
+    }
 }
 
 
@@ -139,21 +194,23 @@ function triVille(treeData) {
 function recherche() {
 
 
-
-
+$('#results').empty();
+tableauPrix = [];
+// get data from cartedescollocs
 
   var treeData;
+  function reqListener(e) {
+      treeData = JSON.parse(this.responseText);
+      console.log(treeData);
+      triVille(treeData, "");
+  }
 
   var oReq = new XMLHttpRequest();
   oReq.onload = reqListener;
   oReq.open("get", "cartedescolocs.json", true);
   oReq.send();
 
-  function reqListener(e) {
-      treeData = JSON.parse(this.responseText);
-      console.log(treeData);
-      triVille(treeData);
-  }
+
 
 
 }
