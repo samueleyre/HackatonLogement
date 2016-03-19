@@ -59,7 +59,7 @@
 
 
     </div>
-
+    <img id="map" src="mapi.png" alt="">
   </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 <script charset="utf-8">
@@ -71,7 +71,9 @@ $('#setDuration').change(function() {
     $('#Duration').html(this.value + " mois");
     recherche();
 })
-
+$('#Loan').change(function() {
+  recherche();
+})
 var tableauPrix = [];
 
 var trier = function(table) {
@@ -79,7 +81,7 @@ var trier = function(table) {
   console.log(table);
   table.sort(function(a, b) { return a - b; })
   for (var i = 0; i < table.length; i++) {
-    createblock(table[i]);
+    createblock(table[i], i);
   }
 
 }
@@ -132,7 +134,7 @@ if (boncoin === "BonCoin")  {
 
 
       // var tableauPrix = [];
-      for (var i = 0; i < treeData.length; i++) {
+      for (var i = 0; i < 31; i++) {
         console.log(treeData[i].LoyerCC);
         if (treeData[i].LoyerCC <= $('#Loan').val()) {
           var prix = treeData[i].LoyerCC;
@@ -164,14 +166,14 @@ if (boncoin === "BonCoin")  {
 };
 
 
-function createblock(prix) {
+function createblock(prix, i) {
 
 
 
   $(document).ready(function(){
-    var loyerContainer = $('<div class="prix"></div>');
+    var loyerContainer = $('<div class="prix" id="res'+i+'""></div>');
     var loyerLink = $('<a class="link" href="#"></a>');
-    loyerLink.html(prix + " €")
+    loyerLink.html(prix + "€")
     loyerContainer.append(loyerLink);
     $('.results').append(loyerContainer);
   });
