@@ -69,6 +69,7 @@ $('#setDuration').val(6);
 $('#Duration').html(6 + " mois");
 $('#setDuration').change(function() {
     $('#Duration').html(this.value + " mois");
+    recherche();
 })
 
 var tableauPrix = [];
@@ -85,6 +86,22 @@ var trier = function(table) {
 
 
 
+
+var calcul = function(prix) {
+
+
+  var Duration = $('#setDuration').val();
+  var newPrix = (( (prix*0.9))/(Duration)) + prix ;
+
+
+  return newPrix;
+
+}
+
+
+
+
+
 var calculPrix = function(treeData, boncoin) {
 
 
@@ -93,13 +110,21 @@ if (boncoin === "BonCoin")  {
   if (treeData) {
 
     for (var i = 0; i < treeData.length; i++) {
-      // console.log(treeData[i].LoyerCC);
+      var prix;
       if (treeData[i].fields.loyer_en_euros <= $('#Loan').val()) {
-
-      tableauPrix.push(treeData[i].fields.loyer_en_euros);
+      var prix = treeData[i].fields.loyer_en_euros;
+      prix = calcul(prix);
+      tableauPrix.push(prix);
       }
     }
   }
+
+
+
+
+
+
+
   return trier(tableauPrix);
 
 
@@ -110,8 +135,9 @@ if (boncoin === "BonCoin")  {
       for (var i = 0; i < treeData.length; i++) {
         console.log(treeData[i].LoyerCC);
         if (treeData[i].LoyerCC <= $('#Loan').val()) {
-
-        tableauPrix.push(treeData[i].LoyerCC);
+          var prix = treeData[i].LoyerCC;
+          prix = calcul(prix);
+          tableauPrix.push(prix);
         }
       }
 
